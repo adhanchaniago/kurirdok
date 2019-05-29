@@ -50,5 +50,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 $route['default_controller'] = 'dashboard';
+$route['pegawai/(:any)'] = 'users/$1';
+$route['kurir/(:any)'] = 'users/$1';
+$route['pegawai/(:any)/(:any)'] = 'users/$1/$2';
+$route['kurir/(:any)/(:any)'] = 'users/$1/$2';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
