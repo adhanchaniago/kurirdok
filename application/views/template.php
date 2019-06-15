@@ -118,7 +118,7 @@
                         <!-- ============================================================== -->
                         <!-- User profile and search -->
                         <!-- ============================================================== -->
-                        <li class="nav-item dropdown">
+                        <!-- <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <img src="<?= base_url('uploads/foto/' . $this->session->foto) ?>" alt="user" class="rounded-circle" width="31">
                             </a>
@@ -127,7 +127,7 @@
                                 <div class="dropdown-divider"></div>
                                 <div class="p-l-30 p-10"><a href="<?= base_url('auth/logout') ?>" class="btn btn-sm btn-success btn-rounded">Logout</a></div>
                             </div>
-                        </li>
+                        </li> -->
                         <!-- ============================================================== -->
                         <!-- User profile and search -->
                         <!-- ============================================================== -->
@@ -146,7 +146,21 @@
             <div class="scroll-sidebar">
                 <!-- Sidebar navigation-->
                 <nav class="sidebar-nav">
-                    <ul id="sidebarnav" class="p-t-30">
+                    <ul id="sidebarnav">
+                        <li class="sidebar-item bg-secondary">
+                            <div class="p-2">
+                                <div class="row text-white">
+                                    <div class="col-4">
+                                        <img src="<?= base_url('uploads/foto/' . $this->session->userdata('foto')) ?>" alt="" class="img-circle w-100 rounded-circle">
+                                    </div>
+                                    <div class="col-8">
+                                        <h5 class="mb-0"><?= $this->session->userdata('nama') ?></h5>
+                                        <p class="mb-0"><?= $this->session->userdata('level') ?></p>
+                                        <a class="btn btn-primary btn-sm rounded-pill btn-block" href="<?= base_url('users/profile') ?>">Edit Profile</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
                         <li class="sidebar-item"> 
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?= base_url('dashboard') ?>" aria-expanded="false">
                                 <i class="mdi mdi-view-dashboard"></i>
@@ -173,14 +187,6 @@
                                         </a>
                                     </li>
                                 </ul>
-                            </li>
-                        <?php endif; ?>
-                        <?php if (is_level('Pegawai') OR is_level('Admin')): ?>
-                            <li class="sidebar-item"> 
-                                <a class="sidebar-link waves-effect waves-dark sidebar-link <?= @$file_active ?>" href="<?= base_url('file') ?>" aria-expanded="false">
-                                    <i class="mdi mdi-file"></i>
-                                    <span class="hide-menu">Files</span>
-                                </a>
                             </li>
                         <?php endif; ?>
                         <?php if (is_level('Admin')): ?>
@@ -219,6 +225,11 @@
                                 </a>
                             </li>
                         <?php endif; ?>
+                        <li class="sidebar-item">
+                            <a href="<?= base_url('auth/logout') ?>" class="sidebar-link waves-effect waves-dark sidebar-link">
+                                <i class="fas fa-share"></i> Logout
+                            </a>
+                        </li>
                     </ul>
                 </nav>
                 <!-- End Sidebar navigation -->
@@ -305,66 +316,24 @@
 
     <script>
         $(document).ready(function () {
-            $('#upload-file').on('submit', function (e) {
-                e.preventDefault();
-                let formData = new FormData(this);
-                let count = $('#data-file tr').length;
-                $.ajax({
-                    url: '<?= base_url('file/store') ?>',
-                    type: 'POST',
-                    data: formData,
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    success: function (res) {
-                        console.log(res);
-                        let dataResult = $.parseJSON(res);
-                        let newRow = '<tr>' +
-                                        '<td>' + (count+1) + '</td>' +
-                                        '<td>' + dataResult.filename + '</td>' +
-                                        '<td>' + 
-                                        <?php if (is_level('Admin')): ?>
-                                            '<a href="<?= base_url() ?>' + dataResult.file_path + '" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" data-original-title="Download" download>' +
-                                                '<i class="mdi mdi-download"></i>' +
-                                            '</a>' +
-                                        <?php elseif (is_level('Pegawai')): ?>
-                                            '<button type="button" class="btn btn-success btn-sm margin-5" data-toggle="modal" data-file="' + dataResult.file_id + '" data-target="#send">' + 
-                                                '<i class="mdi mdi-share"></i>' +
-                                            '</button> ' +
-                                            '<a href="<?= base_url() ?>file/destroy/' + dataResult.file_id + '" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" data-original-title="Hapus" onclick="return confirm(\'Hapus File?\')">' + 
-                                                '<i class="fa fa-trash"></i>' + 
-                                            '</a>' +
-                                        <?php endif; ?>
-                                        '</td>' +
-                                    '</tr>';
-                        $('#data-file').append(newRow);
-                        $('#add').modal('hide');
-                    }
-                });
-
-                return false;
-            });
-
-            $('.send-file').click(function () {
-                let fileId = $(this).attr('data-file');
-                $('#file-send').val(fileId);
-                console.log($('#file-send').val());
-            });
-
             $('.accept').click(function () {
-                let filePath = $(this).attr('data-file');
                 let pesananId = $(this).attr('data-pesanan');
 
-                let urlFile = '<?= base_url() ?>' + filePath;
-                let urlPesanan = '<?= base_url('pengiriman/accept/') ?>' + pesananId
-
-                $('#file-download').attr('href', urlFile);
-                $('#sending').attr('href', urlPesanan);
-                if ($(this).attr('data-note')) {
-                    let dokNote = $(this).attr('data-note');
-                    $('#note').html(dokNote);
-                }
+                $.ajax({
+                    url: '<?= base_url('pengiriman/detail/') ?>' + pesananId,
+                    method: 'GET',
+                    success: function (ret) {
+                        console.log(ret);
+                        console.log(pesananId);
+                        $('#detail-pesanan').html(ret);
+                    }
+                });
             });
+
+            $('.upload-struk, .upload-bukti').click(function () {
+                let pesananId = $(this).attr('data-id');
+                $('.upload-id-pengiriman').val(pesananId);
+            })
 
             $('.detail-pesanan').click(function () {
                 let pemesananId = $(this).attr('data-pemesanan');
@@ -374,7 +343,7 @@
                     success: function (ret) {
                         $('#detail-pemesanan').html(ret);
                     }
-                })
+                });
             })
         });
     </script>

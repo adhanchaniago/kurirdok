@@ -4,8 +4,8 @@
             <thead>
                 <th>No</th>
                 <th>Pengirim</th>
-                <th>File</th>
-                <th>Catatan</th>
+                <th>Judul</th>
+                <th>Tujuan</th>
                 <th>Status</th>
                 <th>Aksi</th>
             </thead>
@@ -17,8 +17,8 @@
                         <tr>
                             <td><?= ($i+1) ?></td>
                             <td><?= @$p->pengirim ?></td>
-                            <td><?= $p->filename ?></td>
-                            <td><?= $p->note ?></td>
+                            <td><?= $p->judul ?></td>
+                            <td><?= $p->tujuan ?></td>
                             <td>
                                 <?php if ($p->status == 'Tunggu'): ?>
                                     <span class="badge badge-warning">Menunggu Kurir</span>
@@ -28,7 +28,7 @@
                             </td>
                             <td>
                                 <?php if ($p->status == 'Tunggu'): ?>
-                                    <a href="javascript:void(0)" class="btn btn-success btn-sm accept" data-pesanan="<?= $p->pengiriman_id ?>" data-file="<?= $p->file_path ?>" data-toggle="modal" data-target="#accept">
+                                    <a href="javascript:void(0)" class="btn btn-success btn-sm accept" data-pesanan="<?= $p->pengiriman_id ?>" data-toggle="modal" data-target="#accept">
                                         <i class="fas fa-check"></i>
                                     </a>
                                 <?php endif; ?>
@@ -45,16 +45,13 @@
     <div class="modal-dialog" role="document ">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Download dan Kirim Dokumen</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Detail Dokumen</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true ">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <h4>Download Dokumen : </h4>
-                <a href="" class="btn btn-success" id="file-download" target="__blank" download>Download</a> <br><br>
-                <h4>Kirim Dokumen : </h4>
-                <a href="" class="btn btn-primary" id="sending">Kirim Dokumen</a>
+                <div id="detail-pesanan"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>

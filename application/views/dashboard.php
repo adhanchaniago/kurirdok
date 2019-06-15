@@ -9,7 +9,7 @@
                     <div class="col-lg-3 col-md-4 col-sm-6">
                         <div class="bg-dark p-10 text-white text-center">
                             <i class="fa fa-file m-b-5 font-16"></i>
-                            <h5 class="m-b-0 m-t-5"><?= $p->filename ?></h5>
+                            <h5 class="m-b-0 m-t-5"><?= $p->judul ?></h5>
                             <?php if ($p->status !== 'Tunggu' && $this->session->level == 'Pegawai'): ?>
                                 <small class="font-light"><?= $p->kurir ?></small>
                             <?php elseif ($p->status == 'Tunggu' && $this->session->level == 'Pegawai'): ?>
@@ -18,7 +18,7 @@
                                 <small class="font-light"><?= $p->pengirim ?></small>
                             <?php endif; ?>
                             <?php if ($this->session->level == 'Kurir'): ?>
-                                <button class="btn btn-primary btn-block btn-xs mt-2 accept" data-pesanan="<?= $p->pengiriman_id ?>" data-file="<?= $p->file_path ?>" data-note="<?= $p->note ?>" data-toggle="modal" data-target="#accept">
+                                <button class="btn btn-primary btn-block btn-xs mt-2 accept" data-pesanan="<?= $p->pengiriman_id ?>" data-note="<?= $p->tujuan ?>" data-toggle="modal" data-target="#accept">
                                     <i class="fas fa-check"></i>
                                 </button>
                             <?php endif; ?>
@@ -40,15 +40,10 @@
                 </button>
             </div>
             <div class="modal-body">
-                <h4>Catatan :</h4>
-                <p id="note"></p>
-                <h4>Download Dokumen : </h4>
-                <a href="" class="btn btn-success" id="file-download" target="__blank" download>Download</a> <br><br>
-                <h4>Kirim Dokumen : </h4>
-                <a href="" class="btn btn-primary" id="sending">Kirim Dokumen</a>
+                <div id="detail-pesanan"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
             </div>
         </div>
     </div>

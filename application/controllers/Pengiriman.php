@@ -71,9 +71,11 @@ class Pengiriman extends CI_Controller
     public function store()
     {
         $post = $this->input->post();
+        // print_r($post);
         $data = [
-            'note' => $post['note'],
-            'file' => $post['file'],
+            'judul' => $post['judul'],
+            'tujuan' => $post['tujuan'],
+            'note' => @$post['note'],
             'pengirim' => $this->session->user_id
         ];
 
@@ -119,12 +121,83 @@ class Pengiriman extends CI_Controller
         }
     }
 
+    public function uploadStruk()
+    {
+        $files = [];
+        $jml_file = count($_FILES['struk']);
+        for ($i=0; $i < $jml_file; $i++) { 
+            $_FILES['file']['name']     = $_FILES['struk']['name'][$i];
+            $_FILES['file']['type']     = $_FILES['struk']['type'][$i];
+            $_FILES['file']['tmp_name'] = $_FILES['struk']['tmp_name'][$i];
+            $_FILES['file']['error']     = $_FILES['struk']['error'][$i];
+            $_FILES['file']['size']     = $_FILES['struk']['size'][$i];
+            
+            // File upload configuration
+            $uploadPath = 'uploads/struk/';
+            $config['upload_path'] = $uploadPath;
+            $config['allowed_types'] = 'jpg|jpeg|png|gif';
+            $config['overwrite'] = true;
+            $config['file_name'] = $this->input->post('pengiriman_id') . '-' . $_FILES['file']['name'];
+            
+            // Load and initialize upload library
+            $this->load->library('upload', $config);
+            
+            // Upload file to server
+            if($this->upload->do_upload('file')){
+                // Uploaded file data
+                $fileData = $this->upload->data();
+                $files[$i] = $fileData['file_name'];
+            }
+        }
+
+        $files_uploaded = json_encode($files);
+        $data['upload_struk'] = $files_uploaded;
+        $result = $this->pesanan->update_data($data, $this->input->post('pengiriman_id'));
+
+        if ($result) {
+            $data_log = [
+                'time' => date('Y-m-d H:i:s'),
+                'keterangan' => $this->session->nama . ' mengupload struk ',
+                'pengiriman_id' => $result->pengiriman_id
+            ];
+            $this->insert_log($data_log);
+            $this->session->set_flashdata(
+                ['success' => 'upload struk berhasil']
+            );
+            redirect('pengiriman/pengirimanku');
+        }
+    }
+
     public function finish()
     {
-        $pengiriman_id = $this->uri->segment(3);
-        $data = [
-            'status' => 'Selesai',
-        ];
+        echo "<pre>";
+        print_r($_FILES);
+        $pengiriman_id = $this->input->post('pengiriman_id');
+        $uploadPath = 'uploads/struk/';
+        $config['upload_path'] = $uploadPath;
+        $config['allowed_types'] = '*';
+        $config['overwrite'] = true;
+        $config['file_name'] = $pengiriman_id . '-' . $_FILES['bukti']['name'] . '-' . round(microtime(date('d-Y H:i:s')));
+        
+        // Load and initialize upload library
+        $this->load->library('upload', $config);
+        
+        // Upload file to server
+        if($this->upload->do_upload('bukti')){
+            // Uploaded file data
+            $fileData = $this->upload->data();
+            $data = [
+                'status' => 'Selesai',
+                'upload_bukti' => $fileData['file_name']
+            ];
+        } else {
+            $this->session->set_flashdata(
+                ['error' => $this->upload->display_errors()]
+            );
+            print_r($this->session->flashdata());
+            // redirect('pengiriman/pengirimanku');
+        }
+
         $result = $this->pesanan->update_data($data, $pengiriman_id);
         if ($result) {
             $data_log = [
@@ -136,8 +209,8 @@ class Pengiriman extends CI_Controller
             $this->session->set_flashdata(
                 ['success' => 'File selesai dikirim']
             );
-            redirect('pengiriman/pengirimanku');
         }
+        redirect('pengiriman/pengirimanku');
     }
 
     public function hapus_pesanan()

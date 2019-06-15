@@ -27,12 +27,22 @@ class Users extends CI_Controller
         return $this->template->load('template', 'users/add', $data);
     }
 
+
+
     public function store()
     {
         $post = $this->input->post();
+
+        if ($_FILES['foto']) {
+            $nama_file = $this->uploading_foto();
+            $data['foto'] = $nama_file;
+        }
+
         $data = [
             'nama' => $post['nama'],
-            'foto' => 'no-photo.png',
+            'telp' => $post['telp'],
+            'divisi' => $post['divisi'],
+            'ruangan' => $post['ruangan'],
             'username' => $post['username'],
             'password' => password_hash($post['password'], PASSWORD_DEFAULT),
             'level' => $post['level']
@@ -65,10 +75,19 @@ class Users extends CI_Controller
     public function update()
     {
         $post = $this->input->post();
+        if ($_FILES['foto']) {
+            $nama_file = $this->uploading_foto();
+            $data['foto'] = $nama_file;
+        }
+
         $data = [
             'nama' => $post['nama'],
-            'foto' => 'no-photo.png',
+            'telp' => $post['telp'],
+            'divisi' => $post['divisi'],
+            'ruangan' => $post['ruangan'],
             'username' => $post['username'],
+            'password' => password_hash($post['password'], PASSWORD_DEFAULT),
+            'level' => $post['level']
         ];
         $user_id = $post['user_id'] ? $post['user_id'] : $this->session->user_id;
         
@@ -118,6 +137,12 @@ class Users extends CI_Controller
 
     public function upload_foto()
     {
+        $this->uploading_foto();
+        redirect('users/profile');
+    }
+
+    private function uploading_foto()
+    {
         $post = $this->input->post();
         $config = [
             'upload_path' => './uploads/foto/',
@@ -143,14 +168,13 @@ class Users extends CI_Controller
                 $this->session->set_flashdata(
                     ['success' => 'Foto profile berhasil diganti']
                 );
+                return $file_data['file_name'];
             } else {
                 $this->session->set_flashdata(
                     ['error' => 'Foto gagal diganti']
                 );
             }
         }
-
-        redirect('users/profile');
     }
 }
 

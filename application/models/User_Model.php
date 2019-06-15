@@ -32,7 +32,7 @@ class User_Model extends CI_Model
 
     public function find_by_id($user_id)
     {
-        $this->db->select('user_id, nama, username, foto, level');
+        $this->db->select('user_id, nama, username, foto, telp, divisi, ruangan, level');
         $this->db->where('user_id', $user_id);
         $data = $this->db->get('users');
         return $data->row();

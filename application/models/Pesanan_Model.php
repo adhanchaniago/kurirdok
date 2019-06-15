@@ -5,9 +5,8 @@ class Pesanan_Model extends CI_Model
 {
     public function get_all()
     {
-        $this->db->select('pengiriman.*, users.nama AS kurir, files.filename');
+        $this->db->select('pengiriman.*, users.nama AS kurir');
         $this->db->join('users', 'pengiriman.kurir = users.user_id', 'LEFT');
-        $this->db->join('files', 'pengiriman.file = files.file_id');
         $this->db->order_by('created_at', 'DESC');
         $this->db->order_by('updated_at', 'DESC');
         $data = $this->db->get('pengiriman');
@@ -16,9 +15,8 @@ class Pesanan_Model extends CI_Model
 
     public function get_by_pengirim($user_id = '')
     {
-        $this->db->select('pengiriman.*, users.nama AS pengirim, files.filename, files.file_path');
+        $this->db->select('pengiriman.*, users.nama AS pengirim');
         $this->db->join('users', 'pengiriman.pengirim = users.user_id');
-        $this->db->join('files', 'pengiriman.file = files.file_id');
         if (@$user_id !== '') {
             $this->db->where('kurir', $user_id);
             $this->db->where_not_in('status', 'Tunggu');
@@ -35,9 +33,8 @@ class Pesanan_Model extends CI_Model
 
     public function get_by_kurir($user_id = '', $finsih = false)
     {
-        $this->db->select('pengiriman.*, users.nama AS kurir, files.filename');
+        $this->db->select('pengiriman.*, users.nama AS kurir');
         $this->db->join('users', 'pengiriman.kurir = users.user_id', 'LEFT');
-        $this->db->join('files', 'pengiriman.file = files.file_id');
         if ($user_id !== '') {
             $this->db->where('pengirim', $user_id);
             // $this->db->where_not_in('status', 'Selesai');
@@ -57,9 +54,9 @@ class Pesanan_Model extends CI_Model
 
     public function get_detail($pengiriman_id)
     {
-        $this->db->select('pengiriman.status, pengiriman.note, files.filename, users.nama');
-        $this->db->join('files', 'pengiriman.file = files.file_id');
-        $this->db->join('users', 'pengiriman.kurir = users.user_id');
+        $this->db->select('pengiriman.*, p.nama AS pengirim, k.nama AS kurir');
+        $this->db->join('users p', 'pengiriman.pengirim = p.user_id');
+        $this->db->join('users k', 'pengiriman.kurir = k.user_id', 'LEFT');
         $this->db->where('pengiriman.pengiriman_id', $pengiriman_id);
         $data = $this->db->get('pengiriman');
         return $data->row();

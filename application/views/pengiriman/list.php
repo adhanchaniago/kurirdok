@@ -4,8 +4,8 @@
             <thead>
                 <th>No</th>
                 <th>Pengirim</th>
-                <th>File</th>
-                <th>Catatan</th>
+                <th>Judul</th>
+                <th>Tujuan</th>
                 <th>Kurir</th>
                 <th>Waktu</th>
                 <th>Status</th>
@@ -18,8 +18,8 @@
                         <tr>
                             <td><?= ($i+1) ?></td>
                             <td><?= $pegawai[$p->pengirim] ?></td>
-                            <td><?= $p->filename ?></td>
-                            <td><?= $p->note ?></td>
+                            <td><?= $p->judul ?></td>
+                            <td><?= $p->tujuan ?></td>
                             <td><?= @$p->kurir ? $p->kurir : '-' ?></td>
                             <td><?= $p->created_at ?></td>
                             <td>
