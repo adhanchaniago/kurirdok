@@ -144,8 +144,12 @@ class Users extends CI_Controller
     private function uploading_foto()
     {
         $post = $this->input->post();
+        $uploadPath = './uploads/foto/';
+        if (file_exists($uploadPath)) {
+            mkdir($uploadPath);
+        }
         $config = [
-            'upload_path' => './uploads/foto/',
+            'upload_path' => $uploadPath,
             'allowed_types' => 'jpg|jpeg|png',
             'file_name' => $this->session->username,
             'file_ext_tolower' => true,
