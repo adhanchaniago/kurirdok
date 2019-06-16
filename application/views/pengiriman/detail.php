@@ -30,6 +30,31 @@
         <td>:</td>
         <td><?= $pengiriman->note ?></td>
     </tr>
+    <?php if ($pengiriman->status == 'Selesai'): ?>
+    <tr>
+        <td>Struk</td>
+        <td>:</td>
+        <td>
+            <?php if ($pengiriman->upload_struk == ''): ?>
+                Tidak Ada Struk
+            <?php else: ?>
+                <?php
+                    $arr_struk = json_decode($pengiriman->upload_struk);
+                    for ($i=0; $i < count($arr_struk); $i++) { 
+                        echo '<img src="' . base_url('uploads/struk/' . $arr_struk[$i]) . '" alt="" class="float-left m-2" style="width: 150px">';
+                    }
+                ?>
+            <?php endif; ?>
+        </td>
+    </tr>
+    <tr>
+        <td>Bukti Terima</td>
+        <td>:</td>
+        <td>
+            <img src="<?= base_url('uploads/struk/' . $pengiriman->upload_bukti) ?>" alt="" style="width: 500px">
+        </td>
+    </tr>
+    <?php endif; ?>
 </table>
 
 <?php if(is_level('Kurir') && $pengiriman->status == 'Tunggu'): ?>

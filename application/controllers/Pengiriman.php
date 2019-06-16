@@ -13,11 +13,53 @@ class Pengiriman extends CI_Controller
 
     public function index()
     {
+        $get = $this->input->get();
+
         $data['pegawai'] = $this->user_pengirim();
-        $data['pengiriman'] = $this->pesanan->get_all();
+        $data['pengiriman'] = $this->pesanan->get_all($get['start'], $get['end']);
         $data['page_title'] = 'Pengiriman';
         $data['pengiriman_active'] = 'active';
         return $this->template->load('template', 'pengiriman/list', $data);
+    }
+
+    public function export()
+    {
+        $get = $this->input->get();
+        $filename = 'Pengiriman Tanggal ' . $get['start'] . ' - ' . $get['end'] . '.xlsx';
+        $no = 1;
+        $pegawai = $this->user_pengirim();
+        $pengiriman = $this->pesanan->get_all($get['start'], $get['end']);
+
+        $this->load->library('PHPExcel');
+        $this->phpexcel->setActiveSheetIndex(0);
+        // set Header
+        $this->phpexcel->getActiveSheet()->SetCellValue('A1', 'No');
+        $this->phpexcel->getActiveSheet()->SetCellValue('B1', 'Pengirim');
+        $this->phpexcel->getActiveSheet()->SetCellValue('C1', 'Judul');
+        $this->phpexcel->getActiveSheet()->SetCellValue('D1', 'Tujuan');
+        $this->phpexcel->getActiveSheet()->SetCellValue('E1', 'Kurir');
+        $this->phpexcel->getActiveSheet()->SetCellValue('F1', 'Waktu');
+        $this->phpexcel->getActiveSheet()->SetCellValue('G1', 'Status');
+
+        $this->phpexcel->getActiveSheet()->getStyle('A1:G1')->getFont()->setBold(true);
+
+        $row_count = 2;
+        foreach ($pengiriman as $p) {
+            $this->phpexcel->getActiveSheet()->SetCellValue('A' . $row_count, $no++);
+            $this->phpexcel->getActiveSheet()->SetCellValue('B' . $row_count, $pegawai[$p->pengirim]);
+            $this->phpexcel->getActiveSheet()->SetCellValue('C' . $row_count, $p->judul);
+            $this->phpexcel->getActiveSheet()->SetCellValue('D' . $row_count, $p->tujuan);
+            $this->phpexcel->getActiveSheet()->SetCellValue('E' . $row_count, $p->kurir);
+            $this->phpexcel->getActiveSheet()->SetCellValue('F' . $row_count, $p->created_at);
+            $this->phpexcel->getActiveSheet()->SetCellValue('G' . $row_count, $p->status);
+            $row_count++;
+        }
+
+        $writer = new PHPExcel_Writer_Excel2007($this->phpexcel);
+        $writer->save('export/' . $filename);
+		// download file
+        header("Content-Type: application/vnd.ms-excel");
+        redirect('export/' . $filename);
     }
 
     // khusus pegawai

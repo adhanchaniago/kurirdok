@@ -1,4 +1,26 @@
 <div class="card">
+    <div class="card-header d-flex">
+        <div class="col-md-6 col-sm-12">
+            <form action="<?= base_url('pengiriman') ?>" method="get">
+                <div class="row">
+                    <label class="col-12"><b>Pilih Tahun :</b></label>
+                    <div class="col-4">
+                        <input type="date" name="start" value="<?= $this->input->get('start') ?>" id="start" class="form-control">
+                    </div>
+                    <div class="col-4">
+                        <input type="date" name="end" value="<?= $this->input->get('end') ?>" id="start" class="form-control">
+                    </div>
+                    <div class="col-4"><button type="submit" class="btn btn-success">Tampilkan</button></div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="text-right ml-auto">
+                <a href="<?= base_url('pengiriman/export?start=' . $this->input->get('start') . '&end=' . $this->input->get('end')) ?>" class="btn btn-info">Export Excel</a>
+            </div>
+        </div>
+    </div>
+    
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-bordered table-striped table-hover">

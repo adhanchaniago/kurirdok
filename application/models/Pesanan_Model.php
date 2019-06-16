@@ -3,10 +3,15 @@ defined('BASEPATH') OR die('No direct script access allowed!');
 
 class Pesanan_Model extends CI_Model
 {
-    public function get_all()
+    public function get_all($start = '', $end = '')
     {
         $this->db->select('pengiriman.*, users.nama AS kurir');
         $this->db->join('users', 'pengiriman.kurir = users.user_id', 'LEFT');
+
+        if ($start !== '' AND $end !== '') {
+            $this->db->where("`created_at` BETWEEN '$start' AND '$end'");
+        }
+
         $this->db->order_by('created_at', 'DESC');
         $this->db->order_by('updated_at', 'DESC');
         $data = $this->db->get('pengiriman');
