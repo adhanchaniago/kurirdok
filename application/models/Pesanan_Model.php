@@ -54,7 +54,7 @@ class Pesanan_Model extends CI_Model
 
     public function get_detail($pengiriman_id)
     {
-        $this->db->select('pengiriman.*, p.nama AS pengirim, k.nama AS kurir');
+        $this->db->select('pengiriman.*, p.nama AS pengirim, k.nama AS kurir, p.divisi AS p_divisi, p.ruangan AS p_ruangan');
         $this->db->join('users p', 'pengiriman.pengirim = p.user_id');
         $this->db->join('users k', 'pengiriman.kurir = k.user_id', 'LEFT');
         $this->db->where('pengiriman.pengiriman_id', $pengiriman_id);

@@ -7,7 +7,11 @@
     <tr>
         <td>Pengirim</td>
         <td>:</td>
-        <td><?= $pengiriman->pengirim ?></td>
+        <td>
+            <?= $pengiriman->pengirim ?> <br> 
+            Divisi: <?= $pengiriman->p_divisi ?> <br>
+            Ruangan: <?= $pengiriman->p_ruangan ?>
+        </td>
     </tr>
     <tr>
         <td>Tujuan</td>
@@ -28,7 +32,7 @@
     </tr>
 </table>
 
-<?php if(is_level('Kurir')): ?>
+<?php if(is_level('Kurir') && $pengiriman->status == 'Tunggu'): ?>
     <a href="<?= base_url('pengiriman/accept/' . $pengiriman->pengiriman_id) ?>" class="btn btn-primary">Kirim Dokumen</a>
 <?php else: ?>
     <ul>

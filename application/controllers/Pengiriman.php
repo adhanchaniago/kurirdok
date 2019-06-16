@@ -134,6 +134,9 @@ class Pengiriman extends CI_Controller
             
             // File upload configuration
             $uploadPath = 'uploads/struk/';
+            if (!file_exists($uploadPath)) {
+                mkdir($uploadPath);
+            }
             $config['upload_path'] = $uploadPath;
             $config['allowed_types'] = 'jpg|jpeg|png|gif';
             $config['overwrite'] = true;
@@ -170,10 +173,11 @@ class Pengiriman extends CI_Controller
 
     public function finish()
     {
-        echo "<pre>";
-        print_r($_FILES);
         $pengiriman_id = $this->input->post('pengiriman_id');
         $uploadPath = 'uploads/struk/';
+        if (!file_exists($uploadPath)) {
+            mkdir($uploadPath);
+        }
         $config['upload_path'] = $uploadPath;
         $config['allowed_types'] = '*';
         $config['overwrite'] = true;
@@ -195,7 +199,7 @@ class Pengiriman extends CI_Controller
                 ['error' => $this->upload->display_errors()]
             );
             print_r($this->session->flashdata());
-            // redirect('pengiriman/pengirimanku');
+            redirect('pengiriman/pengirimanku');
         }
 
         $result = $this->pesanan->update_data($data, $pengiriman_id);
