@@ -166,7 +166,7 @@ class Pengiriman extends CI_Controller
     public function uploadStruk()
     {
         $files = [];
-        $jml_file = count($_FILES['struk']);
+        $jml_file = count($_FILES['struk']['name']);
         for ($i=0; $i < $jml_file; $i++) { 
             $_FILES['file']['name']     = $_FILES['struk']['name'][$i];
             $_FILES['file']['type']     = $_FILES['struk']['type'][$i];
@@ -253,7 +253,7 @@ class Pengiriman extends CI_Controller
             ];
             $this->insert_log($data_log);
             $this->session->set_flashdata(
-                ['success' => 'File selesai dikirim']
+                ['success' => 'File bukti selesai dikirim']
             );
         }
         redirect('pengiriman/pengirimanku');
