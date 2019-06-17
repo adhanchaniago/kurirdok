@@ -16,7 +16,7 @@ class Pengiriman extends CI_Controller
         $get = $this->input->get();
 
         $data['pegawai'] = $this->user_pengirim();
-        $data['pengiriman'] = $this->pesanan->get_all($get['start'], $get['end']);
+        $data['pengiriman'] = $this->pesanan->get_all(@$get['start'], @$get['end']);
         $data['page_title'] = 'Pengiriman';
         $data['pengiriman_active'] = 'active';
         return $this->template->load('template', 'pengiriman/list', $data);
