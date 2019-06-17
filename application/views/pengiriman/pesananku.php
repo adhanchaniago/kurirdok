@@ -99,7 +99,7 @@
                     </div>
                     <div class="form-group">
                         <label for="note">Keterangan</label>
-                        <textarea name="" id="" cols="30" rows="5" class="form-control" placeholder="Masukan Keterangan"></textarea>
+                        <textarea name="note" id="" cols="30" rows="5" class="form-control" placeholder="Masukan Keterangan"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
