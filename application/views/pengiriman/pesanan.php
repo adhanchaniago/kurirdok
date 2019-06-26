@@ -5,7 +5,7 @@
                 <thead>
                     <th>No</th>
                     <th>Pengirim</th>
-                    <th>Judul</th>
+                    <th>Jenis Dokumen</th>
                     <th>Tujuan</th>
                     <th>Status</th>
                     <th>Aksi</th>

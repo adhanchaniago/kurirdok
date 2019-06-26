@@ -5,10 +5,10 @@
                 <div class="row">
                     <label class="col-12"><b>Pilih Tahun :</b></label>
                     <div class="col-4">
-                        <input type="date" name="start" value="<?= $this->input->get('start') ?>" id="start" class="form-control">
+                        <input type="date" name="start" value="<?= $start ?>" id="start" class="form-control">
                     </div>
                     <div class="col-4">
-                        <input type="date" name="end" value="<?= $this->input->get('end') ?>" id="start" class="form-control">
+                        <input type="date" name="end" value="<?= $end ?>" id="start" class="form-control">
                     </div>
                     <div class="col-4"><button type="submit" class="btn btn-success">Tampilkan</button></div>
                 </div>
@@ -27,7 +27,7 @@
                 <thead>
                     <th>No</th>
                     <th>Pengirim</th>
-                    <th>Judul</th>
+                    <th>Jenis Dokumen</th>
                     <th>Tujuan</th>
                     <th>Kurir</th>
                     <th>Waktu</th>
@@ -53,6 +53,8 @@
                                         <span class="badge badge-info">Sedang Dikirim ...</span>
                                     <?php elseif ($p->status == 'Selesai'): ?>
                                         <span class="badge badge-success">Selesai</span>
+                                    <?php elseif ($p->status == 'Batal'): ?>
+                                        <span class="badge badge-danger">Dibatalkan</span>
                                     <?php endif; ?>
                                 </td>
                                 <td>

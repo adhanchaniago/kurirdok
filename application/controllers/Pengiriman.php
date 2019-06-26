@@ -14,9 +14,12 @@ class Pengiriman extends CI_Controller
     public function index()
     {
         $get = $this->input->get();
+        $data['start'] = @$get['start'] ? $get['start'] : date('Y-m-d');
+        $data['end'] = @$get['end'] ? $get['end'] : date('Y-m-d');
+        // echo $start . ' - ' . $end;
 
         $data['pegawai'] = $this->user_pengirim();
-        $data['pengiriman'] = $this->pesanan->get_all(@$get['start'], @$get['end']);
+        $data['pengiriman'] = $this->pesanan->get_all($data['start'], $data['end']);
         $data['page_title'] = 'Pengiriman';
         $data['pengiriman_active'] = 'active';
         return $this->template->load('template', 'pengiriman/list', $data);
@@ -259,19 +262,34 @@ class Pengiriman extends CI_Controller
         redirect('pengiriman/pengirimanku');
     }
 
-    public function hapus_pesanan()
+    public function batalkan()
     {
         $pesanan_id = $this->uri->segment(3);
-        $check_pesanan = $this->pesanan->find_by_id($pesanan_id);
-        if ($check_pesanan->status == 'Tunggu') {
-            $result = $this->pesanan->delete_data($pesanan_id);
-            if ($result) {
-                $this->session->set_flashdata(
-                    ['error' => 'Pengiriman dibatalkan']
-                );
-            }
+        $data = ['status' => 'Batal'];
+        if (!$pesanan_id) {
+            $post = $this->input->post();
+            $pesanan_id = $post['id_pengiriman'];
         }
-        redirect('pengiriman/pesananku');
+        $result = $this->pesanan->update_data($data, $pesanan_id);
+        if ($result) {
+            $data_log = [
+                'time' => date('Y-m-d H:i:s'),
+                'keterangan' => $this->session->nama . ' membatalkan pengiriman ',
+                'pengiriman_id' => $result->pengiriman_id
+            ];
+            $this->insert_log($data_log);
+
+            if (@$post) {
+                $data_berita = [
+                    'berita' => $post['berita_acara'],
+                    'pengiriman_id' => $pesanan_id,
+                    'time' => date('Y-m-d H:i:s')
+                ];
+                $this->insert_berita($data_berita);
+                redirect('pengiriman/pengirimanku');
+            }
+            redirect('pengiriman/pesananku');
+        }
     }
 
     private function user_pengirim()
@@ -289,6 +307,12 @@ class Pengiriman extends CI_Controller
     private function insert_log($data_log)
     {
         $this->log_pesanan->insert_data($data_log);
+    }
+
+    private function insert_berita($data_berita)
+    {
+        $this->load->model('Berita_Model', 'berita_acara');
+        $this->berita_acara->insert_data($data_berita);
     }
 }
 

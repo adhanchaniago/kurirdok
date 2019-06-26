@@ -226,7 +226,7 @@
                             </li>
                         <?php endif; ?>
                         <li class="sidebar-item">
-                            <a href="<?= base_url('auth/logout') ?>" class="sidebar-link waves-effect waves-dark sidebar-link">
+                            <a href="<?= base_url('auth/logout') ?>" class="sidebar-link waves-effect waves-dark sidebar-link" onclick="return confirm('Keluar Aplikasi?')">
                                 <i class="fas fa-share"></i> Logout
                             </a>
                         </li>
@@ -344,6 +344,11 @@
                         $('#detail-pemesanan').html(ret);
                     }
                 });
+            });
+
+            $('.cancel').click(function () {
+                let idPengiriman = $(this).attr('data-id');
+                $('#batal-id-pengiriman').val(idPengiriman);
             })
         });
     </script>

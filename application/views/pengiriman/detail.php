@@ -30,6 +30,11 @@
         <td>:</td>
         <td><?= $pengiriman->note ?></td>
     </tr>
+    <tr>
+        <td>Status</td>
+        <td>:</td>
+        <td><?= $pengiriman->status ?></td>
+    </tr>
     <?php if ($pengiriman->status == 'Selesai'): ?>
     <tr>
         <td>Struk</td>
@@ -52,6 +57,14 @@
         <td>:</td>
         <td>
             <img src="<?= base_url('uploads/struk/' . $pengiriman->upload_bukti) ?>" alt="" style="width: 500px">
+        </td>
+    </tr>
+    <?php elseif ($pengiriman->status == 'Batal'): ?>
+    <tr>
+        <td>Keterangan</td>
+        <td>:</td>
+        <td>
+            <?= $pengiriman->berita ?>
         </td>
     </tr>
     <?php endif; ?>

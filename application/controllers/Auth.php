@@ -30,7 +30,8 @@ class Auth extends CI_Controller
                 ];
 
                 $this->session->set_userdata($user_session);
-                $this->session->set_flashdata(['success' => 'Selamat Datang ' . $check_user->nama]);
+                
+                $this->session->set_flashdata(['success' => 'Selamat  ' . $this->greeting() . $check_user->nama]);
                 redirect('dashboard');
             } else {
                 $this->session->set_flashdata(['error' => 'Login gagal! <br>Password Salah!']);
@@ -48,6 +49,23 @@ class Auth extends CI_Controller
         session_destroy();
 
         redirect('auth');
+    }
+
+    private function greeting()
+    {
+        $time = date('H');
+        $greet = '';
+        if ($time >= 6 AND $time <= 10) {
+            $greet = 'Pagi';
+        } elseif ($time > 10 AND $time < 15) {
+            $greet = 'Siang';
+        } elseif ($time > 14 AND $time < 19) {
+            $greet = 'Sore';
+        } elseif ($time > 18 AND $time < 6) {
+            $greet = 'Malam';
+        }
+
+        return $greet . ' ';
     }
 }
 

@@ -5,10 +5,10 @@
                 <thead>
                     <th>No</th>
                     <th>Pengirim</th>
-                    <th>Judul</th>
+                    <th>Jenis Dokumen</th>
                     <th>Tujuan</th>
                     <th>Status</th>
-                    <th>Aksi</th>
+                    <th width="13%">Aksi</th>
                 </thead>
                 <tbody>
                     <?php if (!$pengiriman): ?>
@@ -25,6 +25,8 @@
                                         <span class="badge badge-success">Pengiriman Selesai</span>
                                     <?php elseif ($p->status == 'Kirim'): ?>
                                         <span class="badge badge-info">Sedang Dikirim ...</span>
+                                    <?php elseif ($p->status == 'Batal'): ?>
+                                        <span class="badge badge-danger">Dibatalkan</span>
                                     <?php endif; ?>
                                 </td>
                                 <td>
@@ -35,7 +37,10 @@
                                         <button class="btn btn-success btn-sm upload-bukti" data-toggle="modal" data-target="#uploadBukti" data-id="<?= $p->pengiriman_id ?>">
                                             <i class="fa fa-check" data-toggle="tooltip" data-placement="top" title="Tandai Selesai"></i>
                                         </button>
-                                    <?php elseif ($p->status == 'Selesai'): ?>
+                                        <button class="btn btn-danger btn-sm cancel" data-toggle="modal" data-target="#canceling" data-id="<?= $p->pengiriman_id ?>">
+                                            <i class="fa fa-times" data-toggle="tooltip" data-placement="top" title="Batalkan Pengiriman"></i>
+                                        </button>
+                                    <?php elseif ($p->status == 'Selesai' || $p->status == 'Batal'): ?>
                                         <button class="btn btn-primary btn-sm accept" data-pesanan="<?= $p->pengiriman_id ?>" data-toggle="modal" data-target="#detail">
                                             <i class="fas fa-search"></i>
                                         </button>
@@ -121,3 +126,26 @@
     </div>
 </div>
 
+<div class="modal fade" id="canceling" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog" role="document ">
+        <div class="modal-content">
+            <form action="<?= base_url('pengiriman/batalkan') ?>" method="post" onsubmit="return confirm('Yakin batalkan pengiriman?')">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Batalkan Pengiriman</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true ">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id_pengiriman" id="batal-id-pengiriman">
+                    <label for="berita">Berita Acara :</label>
+                    <textarea name="berita_acara" id="berita_acara" rows="5" class="form-control" required></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Kirim</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -14,7 +14,7 @@
             <table class="table table-bordered table-striped table-hover">
                 <thead>
                     <th>No</th>
-                    <th>Judul</th>
+                    <th>Jenis Dokumen</th>
                     <th>Tujuan</th>
                     <th>Kurir</th>
                     <th>Waktu</th>
@@ -39,12 +39,14 @@
                                         <span class="badge badge-info">Sedang Dikirim ...</span>
                                     <?php elseif ($p->status == 'Selesai'): ?>
                                         <span class="badge badge-success">Selesai</span>
+                                    <?php elseif ($p->status == 'Batal'): ?>
+                                        <span class="badge badge-danger">Dibatalkan</span>
                                     <?php endif; ?>
                                 </td>
                                 <td>
                                     <?php if ($p->status == 'Tunggu'): ?>
-                                        <a href="<?= base_url('pengiriman/hapus_pesanan/' . $p->pengiriman_id) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Batalkan pengiriman?')">
-                                            <i class="fa fa-trash"></i>
+                                        <a href="<?= base_url('pengiriman/batalkan/' . $p->pengiriman_id) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Batalkan pengiriman?')">
+                                            <i class="fa fa-times"></i>
                                         </a>
                                     <?php elseif ($p->status == 'Selesai'): ?>
                                         <button class="detail-pesanan btn btn-primary btn-sm" data-pemesanan="<?= $p->pengiriman_id ?>" data-toggle="modal" data-target="#detail"><i class="fas fa-search"></i></button>
@@ -90,8 +92,8 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="judul">Judul</label>
-                        <input type="text" name="judul" id="judul" class="form-control" placeholder="Isi judul pengiriman" required>
+                        <label for="judul">Jenis Dokumen</label>
+                        <input type="text" name="judul" id="judul" class="form-control" placeholder="Masukan Jenis Dokumen" required>
                     </div>
                     <div class="form-group">
                         <label for="tujuan">Tujuan</label>

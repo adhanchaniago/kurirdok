@@ -9,8 +9,15 @@ class Pesanan_Model extends CI_Model
         $this->db->join('users', 'pengiriman.kurir = users.user_id', 'LEFT');
 
         if ($start !== '' AND $end !== '') {
-            $this->db->where("`created_at` BETWEEN '$start' AND '$end'");
+            if ($start == $end) {
+                $this->db->like('`pengiriman`.`created_at`', $start);
+                $this->db->or_like('`pengiriman`.`updated_at`', $start);
+            } else {
+                $this->db->where("`created_at` BETWEEN '$start' AND '$end'");
+                $this->db->or_where("`updated_at` BETWEEN '$start' AND '$end'");
+            }
         }
+
 
         $this->db->order_by('created_at', 'DESC');
         $this->db->order_by('updated_at', 'DESC');
@@ -59,9 +66,10 @@ class Pesanan_Model extends CI_Model
 
     public function get_detail($pengiriman_id)
     {
-        $this->db->select('pengiriman.*, p.nama AS pengirim, k.nama AS kurir, p.divisi AS p_divisi, p.ruangan AS p_ruangan');
+        $this->db->select('pengiriman.*, p.nama AS pengirim, k.nama AS kurir, p.divisi AS p_divisi, p.ruangan AS p_ruangan, berita_acara.berita');
         $this->db->join('users p', 'pengiriman.pengirim = p.user_id');
         $this->db->join('users k', 'pengiriman.kurir = k.user_id', 'LEFT');
+        $this->db->join('berita_acara', 'pengiriman.pengiriman_id = berita_acara.pengiriman_id', 'LEFT');
         $this->db->where('pengiriman.pengiriman_id', $pengiriman_id);
         $data = $this->db->get('pengiriman');
         return $data->row();
@@ -98,10 +106,10 @@ class Pesanan_Model extends CI_Model
         return $result;
     }
 
-    public function delete_data($pengiriman_id)
-    {
-        $this->db->where('pengiriman_id', $pengiriman_id);
-        $result = $this->db->delete('pengiriman');
-    }
+    // public function delete_data($pengiriman_id)
+    // {
+    //     $this->db->where('pengiriman_id', $pengiriman_id);
+    //     $result = $this->db->delete('pengiriman');
+    // }
 }
 
