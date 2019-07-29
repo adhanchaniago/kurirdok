@@ -13,13 +13,14 @@ class Pesanan_Model extends CI_Model
                 $this->db->like('`pengiriman`.`created_at`', $start);
                 $this->db->or_like('`pengiriman`.`updated_at`', $start);
             } else {
+                $end = date('Y-m-d H:i:s', strtotime($end . ' +1 day'));
                 $this->db->where("`created_at` BETWEEN '$start' AND '$end'");
                 $this->db->or_where("`updated_at` BETWEEN '$start' AND '$end'");
             }
         }
 
 
-        $this->db->order_by('created_at', 'DESC');
+        // $this->db->order_by('created_at', 'DESC');
         $this->db->order_by('updated_at', 'DESC');
         $data = $this->db->get('pengiriman');
         return $data->result();
@@ -52,9 +53,11 @@ class Pesanan_Model extends CI_Model
             // $this->db->where_not_in('status', 'Selesai');
         }
         if ($finsih == true) {
-            $this->db->where('status', 'Selesai');
+            $this->db->where_in('status', ['Selesai', 'Batal']);
+            // $this->db->or_where('status', 'Batal');
         } else {
-            $this->db->where_not_in('status', 'Selesai');
+            $this->db->where_not_in('status', ['Batal', 'Selesai']);
+            // $this->db->where_not_in('status', 'Batal');
         }
         
         $this->db->order_by('status', 'ASC');

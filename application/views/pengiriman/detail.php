@@ -71,7 +71,7 @@
 </table>
 
 <?php if(is_level('Kurir') && $pengiriman->status == 'Tunggu'): ?>
-    <a href="<?= base_url('pengiriman/accept/' . $pengiriman->pengiriman_id) ?>" class="btn btn-primary">Kirim Dokumen</a>
+    <a href="<?= base_url('pengiriman/accept/' . $pengiriman->pengiriman_id) ?>" class="btn btn-primary">Ambil Dokumen</a>
 <?php else: ?>
     <ul>
         <?php foreach ($log as $l): ?>

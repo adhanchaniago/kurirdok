@@ -41,8 +41,9 @@ class Pengiriman extends CI_Controller
         $this->phpexcel->getActiveSheet()->SetCellValue('C1', 'Judul');
         $this->phpexcel->getActiveSheet()->SetCellValue('D1', 'Tujuan');
         $this->phpexcel->getActiveSheet()->SetCellValue('E1', 'Kurir');
-        $this->phpexcel->getActiveSheet()->SetCellValue('F1', 'Waktu');
-        $this->phpexcel->getActiveSheet()->SetCellValue('G1', 'Status');
+        $this->phpexcel->getActiveSheet()->SetCellValue('F1', 'Waktu Pengajuan');
+        $this->phpexcel->getActiveSheet()->SetCellValue('G1', 'Waktu Proses');
+        $this->phpexcel->getActiveSheet()->SetCellValue('H1', 'Status');
 
         $this->phpexcel->getActiveSheet()->getStyle('A1:G1')->getFont()->setBold(true);
 
@@ -54,7 +55,8 @@ class Pengiriman extends CI_Controller
             $this->phpexcel->getActiveSheet()->SetCellValue('D' . $row_count, $p->tujuan);
             $this->phpexcel->getActiveSheet()->SetCellValue('E' . $row_count, $p->kurir);
             $this->phpexcel->getActiveSheet()->SetCellValue('F' . $row_count, $p->created_at);
-            $this->phpexcel->getActiveSheet()->SetCellValue('G' . $row_count, $p->status);
+            $this->phpexcel->getActiveSheet()->SetCellValue('G' . $row_count, $p->updated_at);
+            $this->phpexcel->getActiveSheet()->SetCellValue('H' . $row_count, $p->status);
             $row_count++;
         }
 
@@ -145,6 +147,28 @@ class Pengiriman extends CI_Controller
     }
 
     public function accept()
+    {
+        $pengiriman_id = $this->uri->segment(3);
+        $data = [
+            'status' => 'Pick Up',
+            'kurir' => $this->session->user_id
+        ];
+        $result = $this->pesanan->update_data($data, $pengiriman_id);
+        if ($result) {
+            $data_log = [
+                'time' => date('Y-m-d H:i:s'),
+                'keterangan' => $this->session->nama . ' mengambil dokumen ',
+                'pengiriman_id' => $result->pengiriman_id
+            ];
+            $this->insert_log($data_log);
+            $this->session->set_flashdata(
+                ['success' => 'File sedang diambil']
+            );
+            redirect('pengiriman/pengirimanku');
+        }
+    }
+
+    public function kirim()
     {
         $pengiriman_id = $this->uri->segment(3);
         $data = [
@@ -256,7 +280,7 @@ class Pengiriman extends CI_Controller
             ];
             $this->insert_log($data_log);
             $this->session->set_flashdata(
-                ['success' => 'File bukti selesai dikirim']
+                ['success' => 'File bukti diupload, pengiriman selesai!']
             );
         }
         redirect('pengiriman/pengirimanku');
@@ -269,7 +293,9 @@ class Pengiriman extends CI_Controller
         if (!$pesanan_id) {
             $post = $this->input->post();
             $pesanan_id = $post['id_pengiriman'];
+            print_r($post);
         }
+
         $result = $this->pesanan->update_data($data, $pesanan_id);
         if ($result) {
             $data_log = [
@@ -288,8 +314,8 @@ class Pengiriman extends CI_Controller
                 $this->insert_berita($data_berita);
                 redirect('pengiriman/pengirimanku');
             }
-            redirect('pengiriman/pesananku');
         }
+        redirect('pengiriman/pesananku');
     }
 
     private function user_pengirim()

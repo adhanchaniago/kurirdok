@@ -35,6 +35,8 @@
                                 <td>
                                     <?php if ($p->status == 'Tunggu'): ?>
                                         <span class="badge badge-warning">Menunggu Kurir</span>
+                                    <?php elseif ($p->status == 'Pick Up'): ?>
+                                        <span class="badge badge-primary">Sedang Diambil ...</span>
                                     <?php elseif ($p->status == 'Kirim'): ?>
                                         <span class="badge badge-info">Sedang Dikirim ...</span>
                                     <?php elseif ($p->status == 'Selesai'): ?>
@@ -48,9 +50,8 @@
                                         <a href="<?= base_url('pengiriman/batalkan/' . $p->pengiriman_id) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Batalkan pengiriman?')">
                                             <i class="fa fa-times"></i>
                                         </a>
-                                    <?php elseif ($p->status == 'Selesai'): ?>
-                                        <button class="detail-pesanan btn btn-primary btn-sm" data-pemesanan="<?= $p->pengiriman_id ?>" data-toggle="modal" data-target="#detail"><i class="fas fa-search"></i></button>
                                     <?php endif; ?>
+                                    <button class="detail-pesanan btn btn-primary btn-sm" data-pemesanan="<?= $p->pengiriman_id ?>" data-toggle="modal" data-target="#detail"><i class="fas fa-search"></i></button>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

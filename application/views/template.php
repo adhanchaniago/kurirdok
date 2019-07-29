@@ -39,9 +39,9 @@
         <!-- ============================================================== -->
         <!-- Topbar header - style you can find in pages.scss -->
         <!-- ============================================================== -->
-        <header class="topbar" data-navbarbg="skin5">
+        <header class="topbar" <?= is_level('Kurir') ? 'style="background-color: #2b76ad"' : 'data-navbarbg="skin5"' ?>>
             <nav class="navbar top-navbar navbar-expand-md navbar-dark">
-                <div class="navbar-header" data-logobg="skin5">
+                <div class="navbar-header" <?= is_level('Kurir') ? 'style="background-color: #2b76ad"' : 'data-navbarbg="skin5"' ?>>
                     <!-- This is for the sidebar toggle which is visible on mobile only -->
                     <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i class="ti-menu ti-close"></i></a>
                     <!-- ============================================================== -->
@@ -76,12 +76,12 @@
                     <!-- ============================================================== -->
                     <!-- Toggle which is visible on mobile only -->
                     <!-- ============================================================== -->
-                    <a class="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><i class="ti-more"></i></a>
+                    <a class="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><i></i></a>
                 </div>
                 <!-- ============================================================== -->
                 <!-- End Logo -->
                 <!-- ============================================================== -->
-                <div class="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
+                <div class="navbar-collapse collapse" id="navbarSupportedContent" <?= is_level('Kurir') ? 'style="background-color: #2b76ad !important"' : 'data-navbarbg="skin5"' ?>>
                     <!-- ============================================================== -->
                     <!-- toggle and nav items -->
                     <!-- ============================================================== -->
@@ -226,7 +226,7 @@
                             </li>
                         <?php endif; ?>
                         <li class="sidebar-item">
-                            <a href="<?= base_url('auth/logout') ?>" class="sidebar-link waves-effect waves-dark sidebar-link" onclick="return confirm('Keluar Aplikasi?')">
+                            <a href="<?= base_url('auth/logout') ?>" class="sidebar-link waves-effect waves-dark sidebar-link" onclick="return confirm('Yakin keluar aplikasi?')">
                                 <i class="fas fa-share"></i> Logout
                             </a>
                         </li>
@@ -284,7 +284,7 @@
             <!-- footer -->
             <!-- ============================================================== -->
             <footer class="footer text-center">
-                All Rights Reserved by Chazi. Designed and Developed by <a href="https://chazi.com" target="__blank">Chazi</a>.
+                All Rights Reserved by Adi Priyono. Designed and Developed by Adi Priyono.
             </footer>
             <!-- ============================================================== -->
             <!-- End footer -->
@@ -349,7 +349,7 @@
             $('.cancel').click(function () {
                 let idPengiriman = $(this).attr('data-id');
                 $('#batal-id-pengiriman').val(idPengiriman);
-            })
+            });
         });
     </script>
 </body>

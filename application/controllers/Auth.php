@@ -32,6 +32,7 @@ class Auth extends CI_Controller
                 $this->session->set_userdata($user_session);
                 
                 $this->session->set_flashdata(['success' => 'Selamat  ' . $this->greeting() . $check_user->nama]);
+                print_r($this->session->flashdata('success'));
                 redirect('dashboard');
             } else {
                 $this->session->set_flashdata(['error' => 'Login gagal! <br>Password Salah!']);
@@ -61,7 +62,7 @@ class Auth extends CI_Controller
             $greet = 'Siang';
         } elseif ($time > 14 AND $time < 19) {
             $greet = 'Sore';
-        } elseif ($time > 18 AND $time < 6) {
+        } elseif ($time > 18 OR $time < 6) {
             $greet = 'Malam';
         }
 

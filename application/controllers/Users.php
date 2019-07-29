@@ -33,16 +33,16 @@ class Users extends CI_Controller
     {
         $post = $this->input->post();
 
-        if ($_FILES['foto']) {
+        if (@$_FILES['foto']['error'] == 0) {
             $nama_file = $this->uploading_foto();
-            $data['foto'] = $nama_file;
+            // $data['foto'] = $nama_file;
         }
 
         $data = [
             'nama' => $post['nama'],
-            'telp' => $post['telp'],
-            'divisi' => $post['divisi'],
-            'ruangan' => $post['ruangan'],
+            'telp' => @$post['telp'],
+            'divisi' => @$post['divisi'],
+            'ruangan' => @$post['ruangan'],
             'username' => $post['username'],
             'password' => password_hash($post['password'], PASSWORD_DEFAULT),
             'level' => $post['level']
@@ -75,19 +75,19 @@ class Users extends CI_Controller
     public function update()
     {
         $post = $this->input->post();
-        if ($_FILES['foto']) {
+        if (@$_FILES['foto']['error'] == 0) {
             $nama_file = $this->uploading_foto();
-            $data['foto'] = $nama_file;
+            // $data['foto'] = $nama_file;
         }
 
         $data = [
             'nama' => $post['nama'],
-            'telp' => $post['telp'],
-            'divisi' => $post['divisi'],
-            'ruangan' => $post['ruangan'],
+            'telp' => @$post['telp'],
+            'divisi' => @$post['divisi'],
+            'ruangan' => @$post['ruangan'],
             'username' => $post['username'],
             'password' => password_hash($post['password'], PASSWORD_DEFAULT),
-            'level' => $post['level']
+            // 'level' => $post['level']
         ];
         $user_id = $post['user_id'] ? $post['user_id'] : $this->session->user_id;
         
@@ -104,6 +104,10 @@ class Users extends CI_Controller
                 
                 redirect(strtolower($post['level']) . '/index');
             } else {
+                if ($user_id == $this->session->user_id) {
+                    $this->session->set_userdata(['nama' => $post['nama']]);
+                }
+
                 $this->session->set_flashdata(
                     ['success' => 'Profile telah diubah']
                 );
@@ -151,7 +155,7 @@ class Users extends CI_Controller
         $config = [
             'upload_path' => $uploadPath,
             'allowed_types' => 'jpg|jpeg|png',
-            'file_name' => $this->session->username,
+            'file_name' => round(microtime(date('d-Y H:i:s'))),
             'file_ext_tolower' => true,
             'overwrite' => true,
         ];

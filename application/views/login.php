@@ -18,9 +18,11 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12 col-md-8 col-lg-6 offset-md-2 offset-lg-3 pt-5">
-                <div class="card mt-5">
+                <div class="card mt-3">
                     <div class="card-header text-center">
-                        <h3 class="card-title">Login To Your Account</h3>
+                        <h3 class="card-title">KurirDok</h3>
+                        <img src="<?= base_url('assets/img/Kurirdok.jpg') ?>" class="w-100">
+                        <!-- <h4 class="card-title mt-2">Masuk Ke Akun</h4> -->
                     </div>
                     <div class="card-body">
                         <?php if (@$this->session->flashdata('error')): ?>

@@ -11,7 +11,7 @@
                             <i class="fa fa-file m-b-5 font-16"></i>
                             <h5 class="m-b-0 m-t-5"><?= $p->judul ?></h5>
                             <?php if ($p->status !== 'Tunggu' && $this->session->level == 'Pegawai'): ?>
-                                <small class="font-light"><?= $p->kurir ?></small>
+                                <small class="font-light">Kurir: <?= $p->kurir ?></small>
                             <?php elseif ($p->status == 'Tunggu' && $this->session->level == 'Pegawai'): ?>
                                 <span class="badge badge-warning mt-2">Menunggu Kurir</span>
                             <?php elseif ($this->session->level !== 'Pegawai'): ?>

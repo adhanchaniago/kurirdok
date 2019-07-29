@@ -23,6 +23,8 @@
                                 <td>
                                     <?php if ($p->status == 'Selesai'): ?>
                                         <span class="badge badge-success">Pengiriman Selesai</span>
+                                    <?php elseif ($p->status == 'Pick Up'): ?>
+                                        <span class="badge badge-primary">Sedang Diambil ...</span>
                                     <?php elseif ($p->status == 'Kirim'): ?>
                                         <span class="badge badge-info">Sedang Dikirim ...</span>
                                     <?php elseif ($p->status == 'Batal'): ?>
@@ -30,15 +32,18 @@
                                     <?php endif; ?>
                                 </td>
                                 <td>
+                                    <?php if($p->status == 'Pick Up'): ?>
+                                        <a href="<?= base_url('pengiriman/kirim/' . $p->pengiriman_id) ?>" class="btn btn-info btn-sm" data-toggle="tooltip" title="Kirim Dokumen"><i class="fa fa-truck"></i></a>
+                                        <button class="btn btn-danger btn-sm cancel" data-toggle="modal" data-target="#canceling" data-id="<?= $p->pengiriman_id ?>">
+                                            <i class="fa fa-times" data-toggle="tooltip" data-placement="top" title="Batalkan Pengiriman"></i>
+                                        </button>
+                                    <?php endif; ?>
                                     <?php if ($p->status == 'Kirim'): ?>
                                         <button class="btn btn-info btn-sm upload-struk" data-toggle="modal" data-target="#uploadStruk" data-id="<?= $p->pengiriman_id ?>">
                                             <i class="fa fa-upload" data-toggle="tooltip" data-placement="top" title="Upload Struk"></i>
                                         </button>
                                         <button class="btn btn-success btn-sm upload-bukti" data-toggle="modal" data-target="#uploadBukti" data-id="<?= $p->pengiriman_id ?>">
                                             <i class="fa fa-check" data-toggle="tooltip" data-placement="top" title="Tandai Selesai"></i>
-                                        </button>
-                                        <button class="btn btn-danger btn-sm cancel" data-toggle="modal" data-target="#canceling" data-id="<?= $p->pengiriman_id ?>">
-                                            <i class="fa fa-times" data-toggle="tooltip" data-placement="top" title="Batalkan Pengiriman"></i>
                                         </button>
                                     <?php elseif ($p->status == 'Selesai' || $p->status == 'Batal'): ?>
                                         <button class="btn btn-primary btn-sm accept" data-pesanan="<?= $p->pengiriman_id ?>" data-toggle="modal" data-target="#detail">

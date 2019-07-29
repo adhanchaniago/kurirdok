@@ -16,7 +16,7 @@
         </div>
         <div class="col-md-6 col-sm-12">
             <div class="text-right ml-auto">
-                <a href="<?= base_url('pengiriman/export?start=' . $this->input->get('start') . '&end=' . $this->input->get('end')) ?>" class="btn btn-info">Export Excel</a>
+                <a href="<?= base_url('pengiriman/export?start=' . $start . '&end=' . $end) ?>" class="btn btn-info">Export Excel</a>
             </div>
         </div>
     </div>
@@ -30,7 +30,8 @@
                     <th>Jenis Dokumen</th>
                     <th>Tujuan</th>
                     <th>Kurir</th>
-                    <th>Waktu</th>
+                    <th>Waktu Pengajuan</th>
+                    <th>Waktu Proses</th>
                     <th>Status</th>
                     <th>Aksi</th>
                 </thead>
@@ -46,9 +47,12 @@
                                 <td><?= $p->tujuan ?></td>
                                 <td><?= @$p->kurir ? $p->kurir : '-' ?></td>
                                 <td><?= $p->created_at ?></td>
+                                <td><?= $p->updated_at ?></td>
                                 <td>
                                     <?php if ($p->status == 'Tunggu'): ?>
                                         <span class="badge badge-warning">Menunggu Kurir</span>
+                                    <?php elseif ($p->status == 'Pick Up'): ?>
+                                        <span class="badge badge-primary">Sedang Diambil ...</span>
                                     <?php elseif ($p->status == 'Kirim'): ?>
                                         <span class="badge badge-info">Sedang Dikirim ...</span>
                                     <?php elseif ($p->status == 'Selesai'): ?>
